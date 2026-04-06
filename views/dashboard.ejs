@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | EduMatch</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f1f5f9; display: flex; min-height: 100vh; }
+        .sidebar { width: 250px; background: linear-gradient(180deg, #4f46e5 0%, #7c3aed 100%); min-height: 100vh; position: fixed; left: 0; top: 0; display: flex; flex-direction: column; z-index: 100; box-shadow: 4px 0 20px rgba(79,70,229,0.3); }
+        .sidebar-brand { padding: 28px 24px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .sidebar-brand h4 { color: white; font-size: 22px; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 10px; }
+        .brand-icon { width: 36px; height: 36px; background: rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .sidebar-brand p { color: rgba(255,255,255,0.6); font-size: 11px; margin: 4px 0 0 46px; }
+        .sidebar-nav { padding: 20px 12px; flex: 1; }
+        .nav-label { color: rgba(255,255,255,0.4); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 0 12px; margin-bottom: 8px; margin-top: 16px; }
+        .sidebar-nav a { display: flex; align-items: center; gap: 12px; padding: 11px 14px; color: rgba(255,255,255,0.75); text-decoration: none; border-radius: 12px; font-size: 14px; font-weight: 500; margin-bottom: 4px; transition: all 0.2s; }
+        .sidebar-nav a:hover, .sidebar-nav a.active { background: rgba(255,255,255,0.15); color: white; }
+        .sidebar-nav a i { font-size: 17px; width: 20px; text-align: center; }
+        .sidebar-footer { padding: 16px 12px; border-top: 1px solid rgba(255,255,255,0.1); }
+        .sidebar-footer a { display: flex; align-items: center; gap: 12px; padding: 11px 14px; color: rgba(255,255,255,0.6); text-decoration: none; border-radius: 12px; font-size: 14px; transition: all 0.2s; }
+        .sidebar-footer a:hover { background: rgba(255,0,0,0.15); color: #fca5a5; }
+        .main-content { margin-left: 250px; flex: 1; padding: 28px 32px; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
+        .welcome-text h4 { font-size: 22px; font-weight: 700; color: #1e1b4b; margin: 0; }
+        .welcome-text p { color: #6b7280; font-size: 13px; margin: 4px 0 0; }
+        .user-badge { display: flex; align-items: center; gap: 10px; background: white; padding: 8px 16px 8px 8px; border-radius: 50px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .user-avatar { width: 36px; height: 36px; background: linear-gradient(135deg, #6366f1, #8b5cf6); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 16px; font-weight: 700; }
+        .user-badge span { font-size: 13px; font-weight: 600; color: #374151; }
+        .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
+        .stat-card { background: white; border-radius: 16px; padding: 20px 24px; display: flex; align-items: center; gap: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .stat-icon { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+        .stat-icon.purple { background: #ede9fe; color: #7c3aed; }
+        .stat-icon.blue   { background: #dbeafe; color: #2563eb; }
+        .stat-icon.green  { background: #d1fae5; color: #059669; }
+        .stat-info h5 { font-size: 22px; font-weight: 700; color: #1e1b4b; margin: 0; }
+        .stat-info p { font-size: 12px; color: #6b7280; margin: 2px 0 0; }
+        .search-box { background: white; border-radius: 20px; padding: 24px; margin-bottom: 28px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .search-box h6 { font-size: 15px; font-weight: 700; color: #1e1b4b; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+        .search-tabs { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+        .search-tab { padding: 8px 18px; border-radius: 50px; border: 1.5px solid #e5e7eb; background: #f9fafb; color: #6b7280; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .search-tab:hover { border-color: #6366f1; color: #6366f1; }
+        .search-tab.active { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; border-color: transparent; box-shadow: 0 4px 12px rgba(99,102,241,0.3); }
+        .search-panel { display: none; }
+        .search-panel.active { display: flex; gap: 10px; align-items: center; }
+        .search-panel input, .search-panel select { flex: 1; padding: 11px 16px; border: 1.5px solid #e5e7eb; border-radius: 12px; font-size: 14px; outline: none; background: #f9fafb; transition: all 0.2s; }
+        .search-panel input:focus, .search-panel select:focus { border-color: #6366f1; background: white; box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+        .btn-search { padding: 11px 24px; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+        .btn-search:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(99,102,241,0.4); }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+        .section-header h5 { font-size: 17px; font-weight: 700; color: #1e1b4b; margin: 0; }
+        .section-header span { font-size: 12px; color: #6b7280; }
+        .college-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+        .college-card { background: white; border-radius: 18px; padding: 22px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: all 0.3s; border: 1.5px solid transparent; position: relative; overflow: hidden; }
+        .college-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #6366f1, #8b5cf6); }
+        .college-card:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(99,102,241,0.15); border-color: #e0e7ff; }
+        .college-name { font-size: 15px; font-weight: 700; color: #1e1b4b; margin-bottom: 10px; line-height: 1.4; }
+        .college-meta { display: flex; align-items: center; gap: 6px; color: #6b7280; font-size: 12px; margin-bottom: 6px; }
+        .college-meta i { color: #9ca3af; }
+        .cutoff-row { display: flex; align-items: center; justify-content: space-between; margin: 14px 0 12px; padding: 10px 14px; background: #f8fafc; border-radius: 10px; }
+        .cutoff-label { font-size: 11px; color: #6b7280; }
+        .cutoff-value { font-size: 16px; font-weight: 700; color: #1e1b4b; }
+        .badge-safe     { background: #d1fae5; color: #065f46; padding: 4px 12px; border-radius: 50px; font-size: 11px; font-weight: 600; }
+        .badge-moderate { background: #fef3c7; color: #92400e; padding: 4px 12px; border-radius: 50px; font-size: 11px; font-weight: 600; }
+        .badge-difficult{ background: #fee2e2; color: #991b1b; padding: 4px 12px; border-radius: 50px; font-size: 11px; font-weight: 600; }
+        .btn-view { display: block; width: 100%; padding: 10px; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; text-align: center; text-decoration: none; margin-top: 14px; transition: all 0.2s; }
+        .btn-view:hover { color: white; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(99,102,241,0.35); }
+        .empty-state { grid-column: 1/-1; text-align: center; padding: 50px; color: #9ca3af; }
+        .empty-state i { font-size: 48px; margin-bottom: 12px; display: block; }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <div class="sidebar-brand">
+        <h4><div class="brand-icon">🎓</div> EduMatch</h4>
+        <p>MCA College Finder</p>
+    </div>
+    <div class="sidebar-nav">
+        <div class="nav-label">Main Menu</div>
+        <a href="/dashboard" class="active"><i class="bi bi-speedometer2"></i> Dashboard</a>
+        <a href="/saved"><i class="bi bi-bookmark-heart"></i> Saved Colleges</a>
+        <a href="/feedback"><i class="bi bi-chat-dots"></i> Feedback</a>
+        <div class="nav-label">Account</div>
+        <a href="/profile"><i class="bi bi-person-circle"></i> My Profile</a>
+    </div>
+    <div class="sidebar-footer">
+        <a href="/logout"><i class="bi bi-box-arrow-right"></i> Logout</a>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+    <div class="top-bar">
+        <div class="welcome-text">
+            <h4>Welcome back, <%= student.name %>! 👋</h4>
+            <p>Here are your MCA college recommendations based on your CET score</p>
+        </div>
+        <div class="user-badge">
+            <div class="user-avatar"><%= student.name.charAt(0).toUpperCase() %></div>
+            <span><%= student.cet_percentage %>%</span>
+        </div>
+    </div>
+
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-icon purple"><i class="bi bi-percent"></i></div>
+            <div class="stat-info"><h5><%= student.cet_percentage %>%</h5><p>Your CET Score</p></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon blue"><i class="bi bi-building"></i></div>
+            <div class="stat-info"><h5><%= colleges.length %></h5><p>Colleges Found</p></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon green"><i class="bi bi-mortarboard"></i></div>
+            <div class="stat-info"><h5><%= student.graduation %></h5><p>Your Graduation</p></div>
+        </div>
+    </div>
+
+    <div class="search-box">
+        <h6><i class="bi bi-search" style="color:#6366f1"></i> Find Colleges</h6>
+        <div class="search-tabs">
+            <button class="search-tab active" onclick="showTab('cet', this)">🎯 By CET %</button>
+            <button class="search-tab" onclick="showTab('name', this)">🏫 By College Name</button>
+            <button class="search-tab" onclick="showTab('city', this)">🏙️ By City</button>
+            <button class="search-tab" onclick="showTab('course', this)">📚 By Course</button>
+        </div>
+        <div class="search-panel active" id="panel-cet">
+            <form action="/search" method="GET" style="display:flex;gap:10px;flex:1">
+                <input type="hidden" name="type" value="cet">
+                <input type="number" name="percentage" placeholder="Enter CET % (e.g. 75)" min="0" max="100" required>
+                <button type="submit" class="btn-search">Search Colleges</button>
+            </form>
+        </div>
+        <div class="search-panel" id="panel-name">
+            <form action="/search" method="GET" style="display:flex;gap:10px;flex:1">
+                <input type="hidden" name="type" value="name">
+                <input type="text" name="collegename" placeholder="Enter college name..." required>
+                <button type="submit" class="btn-search">Search</button>
+            </form>
+        </div>
+        <div class="search-panel" id="panel-city">
+            <form action="/search" method="GET" style="display:flex;gap:10px;flex:1">
+                <input type="hidden" name="type" value="city">
+                <input type="text" name="city" placeholder="Enter city (e.g. Pune)" required>
+                <button type="submit" class="btn-search">Search</button>
+            </form>
+        </div>
+        <div class="search-panel" id="panel-course">
+            <form action="/search" method="GET" style="display:flex;gap:10px;flex:1">
+                <input type="hidden" name="type" value="course">
+                <select name="course" required><option value="MCA">MCA</option></select>
+                <button type="submit" class="btn-search">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="section-header">
+        <h5>
+            <% if (typeof searchType !== 'undefined' && searchType) { %>
+                Search Results
+            <% } else { %>
+                Recommended Colleges for You
+            <% } %>
+        </h5>
+        <span><%= colleges.length %> colleges found</span>
+    </div>
+
+    <div class="college-grid">
+        <% if (colleges && colleges.length > 0) { %>
+            <% for (var i = 0; i < colleges.length; i++) { %>
+                <% var college = colleges[i]; %>
+                <div class="college-card">
+                    <div class="college-name"><%= college.name %></div>
+                    <div class="college-meta"><i class="bi bi-geo-alt-fill"></i> <%= college.city %></div>
+                    <div class="college-meta"><i class="bi bi-book-fill"></i> <%= college.course %></div>
+                    <div class="cutoff-row">
+                        <div>
+                            <div class="cutoff-label">Last Year Cutoff</div>
+                            <div class="cutoff-value"><%= college.cutoff_percentage %>%</div>
+                        </div>
+                        <% if (college.chances === 'Safe') { %><span class="badge-safe">✅ Safe</span><% } %>
+                        <% if (college.chances === 'Moderate') { %><span class="badge-moderate">⚠️ Moderate</span><% } %>
+                        <% if (college.chances === 'Difficult') { %><span class="badge-difficult">❌ Difficult</span><% } %>
+                    </div>
+                    <a href="/college/<%= college.id %>" class="btn-view">View Details <i class="bi bi-arrow-right"></i></a>
+                </div>
+            <% } %>
+        <% } else { %>
+            <div class="empty-state">
+                <i class="bi bi-search"></i>
+                <p>No colleges found. Try a different search.</p>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<!-- Logout Modal — inside body, before scripts -->
+<div id="logoutModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:white; border-radius:20px; padding:36px; width:380px; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+        <div style="width:60px; height:60px; background:#fef2f2; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:28px;">🚪</div>
+        <h5 style="font-size:18px; font-weight:700; color:#1e1b4b; margin-bottom:8px;">Leaving so soon?</h5>
+        <p style="font-size:13px; color:#6b7280; margin-bottom:24px;">Do you want to logout and go back?</p>
+        <div style="display:flex; gap:12px;">
+            <button onclick="document.getElementById('logoutModal').style.display='none'"
+                style="flex:1; padding:11px; border:1.5px solid #e5e7eb; border-radius:12px; background:white; color:#374151; font-size:14px; font-weight:600; cursor:pointer;">
+                Stay
+            </button>
+            <button onclick="window.location.href='/logout'"
+                style="flex:1; padding:11px; border:none; border-radius:12px; background:linear-gradient(135deg,#ef4444,#dc2626); color:white; font-size:14px; font-weight:600; cursor:pointer;">
+                Logout
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function showTab(tab, btn) {
+    document.querySelectorAll('.search-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.search-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('panel-' + tab).classList.add('active');
+    btn.classList.add('active');
+}
+
+history.pushState(null, null, location.href);
+
+window.onpopstate = function () {
+    history.pushState(null, null, location.href);
+    document.getElementById('logoutModal').style.display = 'flex';
+};
+</script>
+
+</body>
+</html>

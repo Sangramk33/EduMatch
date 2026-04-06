@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile | EduMatch</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #eef2f7; }
+
+        .profile-box {
+            width: 520px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h2 { text-align: center; margin-bottom: 25px; }
+
+        .label { font-weight: bold; color: #444; margin-bottom: 4px; }
+
+        .value {
+            padding: 9px 12px;
+            background: #f4f4f4;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .btn-back {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+        .btn-back:hover { background: #0056b3; color: white; }
+    </style>
+</head>
+<body>
+
+<div class="profile-box">
+    <h2>My Profile</h2>
+
+    <!-- ✅ student object comes from req.session.user via controller -->
+    <div class="label">Name</div>
+    <div class="value"><%= student.name %></div>
+
+    <div class="label">Email</div>
+    <div class="value"><%= student.email %></div>
+
+    <div class="label">Mobile</div>
+    <!-- ✅ Fixed: guard in case mobile is null/undefined -->
+    <div class="value"><%= student.mobile || 'N/A' %></div>
+
+    <div class="label">CET Percentage</div>
+    <!-- ✅ Fixed: guard in case cet_percentage is null/undefined -->
+    <div class="value"><%= student.cet_percentage ? student.cet_percentage + ' %' : 'N/A' %></div>
+
+    <div class="label">City</div>
+    <div class="value"><%= student.city || 'N/A' %></div>
+
+    <div class="label">Graduation</div>
+    <div class="value"><%= student.graduation || 'N/A' %></div>
+
+    <a href="/dashboard" class="btn-back">⬅ Back to Dashboard</a>
+</div>
+
+<script>
+        history.pushState(null, null, location.href);
+        window.onpopstate = function () {
+            history.pushState(null, null, location.href);
+            if (confirm("Do you want to logout and go back?")) {
+                window.location.href = "/logout";
+            }
+        };
+    </script>
+
+    <div id="logoutModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:white; border-radius:20px; padding:36px; width:380px; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+        <div style="width:60px; height:60px; background:#fef2f2; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:28px;">🚪</div>
+        <h5 style="font-size:18px; font-weight:700; color:#1e1b4b; margin-bottom:8px;">Leaving so soon?</h5>
+        <p style="font-size:13px; color:#6b7280; margin-bottom:24px;">Do you want to logout and go back?</p>
+        <div style="display:flex; gap:12px;">
+            <button onclick="document.getElementById('logoutModal').style.display='none'"
+                style="flex:1; padding:11px; border:1.5px solid #e5e7eb; border-radius:12px; background:white; color:#374151; font-size:14px; font-weight:600; cursor:pointer;">
+                Stay
+            </button>
+            <button onclick="window.location.href='/logout'"
+                style="flex:1; padding:11px; border:none; border-radius:12px; background:linear-gradient(135deg,#ef4444,#dc2626); color:white; font-size:14px; font-weight:600; cursor:pointer;">
+                Logout
+            </button>
+        </div>
+    </div>
+</div>
+<script>
+    history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+        history.pushState(null, null, location.href);
+        document.getElementById('logoutModal').style.display = 'flex';
+    };
+</script>
+
+</body>
+</html>
