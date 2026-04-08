@@ -3,32 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <title>Students | Admin</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
     <style>
         body { background: #f4f6f9; }
-        .sidebar { height: 100vh; background: #1e293b; color: white; position: fixed; width: 220px; padding-top: 20px; }
-        .sidebar a { color: #cbd5e1; display: block; padding: 12px 20px; text-decoration: none; }
-        .sidebar a:hover { background: #334155; color: white; }
-        .content { margin-left: 220px; padding: 30px; }
+
+        /* Sidebar */
+        .sidebar {
+            height: 100vh;
+            width: 240px;
+            position: fixed;
+            background: linear-gradient(180deg,#4f46e5,#6366f1);
+            color: white;
+            padding-top: 20px;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: #e0e7ff;
+            text-decoration: none;
+            border-radius: 10px;
+            margin: 5px 10px;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(5px);
+        }
+
+        .content {
+            margin-left: 220px;
+            padding: 30px;
+        }
+
+        .card {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .table thead {
+            background: #2563eb;
+            color: white;
+        }
+
+        .table tbody tr:hover {
+            background: #f1f5ff;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            border: none;
+            border-radius: 6px;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
     </style>
 </head>
+
 <body>
+
+<!-- Sidebar -->
 <div class="sidebar">
-    <h4 class="text-center mb-4">EduMatch Admin</h4>
+    <h4 class="text-center mb-4">EduMatch Student</h4>
     <a href="/admin/dashboard"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a>
     <a href="/admin/students"><i class="bi bi-people me-2"></i> Students</a>
     <a href="/admin/colleges"><i class="bi bi-building me-2"></i> Colleges</a>
     <a href="/admin/feedback"><i class="bi bi-chat-dots me-2"></i> Feedback</a>
-    <a href="/admin/logout"><i class="bi bi-box-arrow-right me-2"></i> Logout</a>
+    <a href="/admin/logout" id="logoutBtn"><i class="bi bi-box-arrow-right me-2"></i> Logout</a>
 </div>
-<div class="content">
-    <h4 class="mb-4"><i class="bi bi-people me-2"></i>All Students</h4>
 
-    <div class="card shadow-sm">
+<!-- Content -->
+<div class="content">
+    <h4 class="mb-4">
+        <i class="bi bi-people me-2"></i>All Students
+    </h4>
+
+    <div class="card">
         <div class="card-body">
+
             <table class="table table-hover">
-                <thead class="table-dark">
+                <thead>
                     <tr>
                         <th>#</th>
                         <th>Name</th>
@@ -40,6 +103,7 @@
                         <th>Action</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     <% if (students && students.length > 0) { %>
                         <% students.forEach(function(s, i) { %>
@@ -61,15 +125,20 @@
                             </tr>
                         <% }); %>
                     <% } else { %>
-                        <tr><td colspan="8" class="text-center text-muted">No students found.</td></tr>
+                        <tr>
+                            <td colspan="8" class="text-center text-muted">
+                                No students found.
+                            </td>
+                        </tr>
                     <% } %>
                 </tbody>
             </table>
+
         </div>
     </div>
 </div>
 
-<!-- Custom Logout Modal -->
+<!-- Logout Modal (SAME AS COLLEGE PAGE) -->
 <div id="logoutModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
     <div style="background:white; border-radius:20px; padding:36px; width:380px; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
         <div style="width:60px; height:60px; background:#fef2f2; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:28px;">🚪</div>
@@ -88,9 +157,12 @@
     </div>
 </div>
 
+<!-- Scripts SAME -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
     sessionStorage.setItem('onAdminDashboard', 'true');
+
     history.pushState(null, null, location.href);
 
     window.addEventListener('pageshow', function() {
@@ -101,6 +173,13 @@
         history.pushState(null, null, location.href);
         document.getElementById('logoutModal').style.display = 'flex';
     };
+
+    // Logout button click modal
+    document.getElementById("logoutBtn").addEventListener("click", function(e){
+        e.preventDefault();
+        document.getElementById("logoutModal").style.display = "flex";
+    });
 </script>
+
 </body>
 </html>
