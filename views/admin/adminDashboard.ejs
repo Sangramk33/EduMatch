@@ -3,91 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin Dashboard | EduMatch</title>
+
+    <!-- Bootstrap + Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
-        body { background: #f4f6f9; }
-        .sidebar { height: 100vh; background: #1e293b; color: white; position: fixed; width: 220px; padding-top: 20px; }
-        .sidebar a { color: #cbd5e1; display: block; padding: 12px 20px; text-decoration: none; }
-        .sidebar a:hover { background: #334155; color: white; }
-        .content { margin-left: 220px; padding: 30px; }
-        .stat-card { border-radius: 12px; padding: 20px; color: white; }
+        *{
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg,#eef2ff,#f8fafc);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            height: 100vh;
+            width: 240px;
+            position: fixed;
+            background: linear-gradient(180deg,#1e293b,#0f172a);
+            color: white;
+            padding-top: 20px;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.2);
+        }
+
+        .sidebar h4{
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: #cbd5e1;
+            text-decoration: none;
+            border-radius: 10px;
+            margin: 5px 10px;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            transform: translateX(5px);
+        }
+
+        /* Content */
+        .content {
+            margin-left: 240px;
+            padding: 30px;
+        }
+
+        /* Cards */
+        .stat-card {
+            border-radius: 16px;
+            padding: 25px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .stat-card::after {
+            content: "";
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            width: 100px;
+            height: 100px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+        }
+
+        /* Gradient Colors */
+        .bg-blue { background: linear-gradient(135deg,#3b82f6,#2563eb); }
+        .bg-green { background: linear-gradient(135deg,#22c55e,#16a34a); }
+        .bg-yellow { background: linear-gradient(135deg,#facc15,#eab308); color:#1e293b; }
+
+        /* Buttons */
+        .action-btn {
+            border-radius: 14px;
+            padding: 20px;
+            transition: 0.3s;
+            font-weight: 500;
+            background: white;
+            border: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-5px);
+            background: linear-gradient(135deg,#6366f1,#4f46e5);
+            color: white;
+        }
+
+        /* Logout Modal */
+        #logoutModal {
+            backdrop-filter: blur(6px);
+        }
+
     </style>
 </head>
 <body>
 
+<!-- Sidebar -->
 <div class="sidebar">
-    <h4 class="text-center mb-4">EduMatch Admin</h4>
+    <h4 class="text-center mb-4">EduMatch</h4>
+
     <a href="/admin/dashboard"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a>
     <a href="/admin/students"><i class="bi bi-people me-2"></i> Students</a>
     <a href="/admin/colleges"><i class="bi bi-building me-2"></i> Colleges</a>
     <a href="/admin/feedback"><i class="bi bi-chat-dots me-2"></i> Feedback</a>
-    <a href="/admin/logout"><i class="bi bi-box-arrow-right me-2"></i> Logout</a>
+    <a href="#" onclick="document.getElementById('logoutModal').style.display='flex'">
+        <i class="bi bi-box-arrow-right me-2"></i> Logout
+    </a>
 </div>
 
+<!-- Content -->
 <div class="content">
-    <h4 class="mb-4">Welcome, <%= admin.name %> 👋</h4>
 
-    <div class="row g-3 mb-4">
+    <h4 class="mb-4 fw-semibold">
+        Welcome, <%= admin.name %> 👋
+    </h4>
+
+    <!-- Stats -->
+    <div class="row g-4 mb-4">
         <div class="col-md-4">
-            <div class="stat-card" style="background:#0d6efd">
+            <div class="stat-card bg-blue">
                 <h2><%= totalStudents %></h2>
-                <p class="mb-0"><i class="bi bi-people me-2"></i>Total Students</p>
+                <p><i class="bi bi-people me-2"></i>Total Students</p>
             </div>
         </div>
+
         <div class="col-md-4">
-            <div class="stat-card" style="background:#198754">
+            <div class="stat-card bg-green">
                 <h2><%= totalColleges %></h2>
-                <p class="mb-0"><i class="bi bi-building me-2"></i>Total Colleges</p>
+                <p><i class="bi bi-building me-2"></i>Total Colleges</p>
             </div>
         </div>
+
         <div class="col-md-4">
-            <div class="stat-card" style="background:#ffc107">
+            <div class="stat-card bg-yellow">
                 <h2><%= pendingFeedbacks %></h2>
-                <p class="mb-0"><i class="bi bi-chat-dots me-2"></i>Pending Feedbacks</p>
+                <p><i class="bi bi-chat-dots me-2"></i>Pending Feedbacks</p>
             </div>
         </div>
     </div>
 
-    <div class="row g-3">
+    <!-- Actions -->
+    <div class="row g-4">
         <div class="col-md-4">
-            <a href="/admin/students" class="btn btn-outline-primary w-100 py-3">
-                <i class="bi bi-people fs-4 d-block mb-2"></i>Manage Students
+            <a href="/admin/students" class="action-btn d-block text-center">
+                <i class="bi bi-people fs-2 d-block mb-2"></i>
+                Manage Students
             </a>
         </div>
+
         <div class="col-md-4">
-            <a href="/admin/colleges" class="btn btn-outline-success w-100 py-3">
-                <i class="bi bi-building fs-4 d-block mb-2"></i>Manage Colleges
+            <a href="/admin/colleges" class="action-btn d-block text-center">
+                <i class="bi bi-building fs-2 d-block mb-2"></i>
+                Manage Colleges
             </a>
         </div>
+
         <div class="col-md-4">
-            <a href="/admin/feedback" class="btn btn-outline-warning w-100 py-3">
-                <i class="bi bi-chat-dots fs-4 d-block mb-2"></i>View Feedback
+            <a href="/admin/feedback" class="action-btn d-block text-center">
+                <i class="bi bi-chat-dots fs-2 d-block mb-2"></i>
+                View Feedback
             </a>
         </div>
     </div>
+
 </div>
 
-<!-- Custom Logout Modal -->
-<div id="logoutModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+<!-- Logout Modal -->
+<div id="logoutModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; z-index:9999; align-items:center; justify-content:center;">
     <div style="background:white; border-radius:20px; padding:36px; width:380px; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
-        <div style="width:60px; height:60px; background:#fef2f2; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:28px;">🚪</div>
-        <h5 style="font-size:18px; font-weight:700; color:#1e1b4b; margin-bottom:8px;">Leaving so soon?</h5>
-        <p style="font-size:13px; color:#6b7280; margin-bottom:24px;">Do you want to logout and go back?</p>
-        <div style="display:flex; gap:12px;">
+        
+        <div style="font-size:40px;">🚪</div>
+
+        <h5 class="mt-3 fw-bold">Leaving so soon?</h5>
+        <p class="text-muted">Do you want to logout?</p>
+
+        <div class="d-flex gap-2 mt-3">
             <button onclick="document.getElementById('logoutModal').style.display='none'"
-                style="flex:1; padding:11px; border:1.5px solid #e5e7eb; border-radius:12px; background:white; color:#374151; font-size:14px; font-weight:600; cursor:pointer;">
+                class="btn btn-outline-secondary w-100">
                 Stay
             </button>
+
             <button onclick="window.location.href='/admin/logout'"
-                style="flex:1; padding:11px; border:none; border-radius:12px; background:linear-gradient(135deg,#ef4444,#dc2626); color:white; font-size:14px; font-weight:600; cursor:pointer;">
+                class="btn btn-danger w-100">
                 Logout
             </button>
         </div>
+
     </div>
 </div>
 
+<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
     sessionStorage.setItem('onAdminDashboard', 'true');
     history.pushState(null, null, location.href);
