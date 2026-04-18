@@ -124,7 +124,7 @@ exports.showColleges = (req, res) => {
 };
 
 exports.addCollege = (req, res) => {
-    const { name, city, course, cutoff_percentage } = req.body;
+    const { name, city, course, cutoff_percentage, website } = req.body;
 
     // ✅ Checkboxes — checked असेल तर 1, नसेल तर 0
     const hostel  = req.body.hostel  ? 1 : 0;
@@ -134,8 +134,9 @@ exports.addCollege = (req, res) => {
     const canteen = req.body.canteen ? 1 : 0;
     const wifi    = req.body.wifi    ? 1 : 0;
 
-    const sql = "INSERT INTO collegemaster (name, city, course) VALUES (?, ?, ?)";
-    db.query(sql, [name, city, course], (err, result) => {
+    // ✅ website पण save करा
+    const sql = "INSERT INTO collegemaster (name, city, course, website) VALUES (?, ?, ?, ?)";
+    db.query(sql, [name, city, course, website || null], (err, result) => {
         if (err) {
             console.error("Add College Error:", err);
             return res.redirect("/admin/colleges");
@@ -147,7 +148,6 @@ exports.addCollege = (req, res) => {
         db.query(meritSql, [collegeId, cutoff_percentage], (err) => {
             if (err) console.error("Merit Error:", err);
 
-            // ✅ Admin ने set केलेल्या amenities insert करा
             const amenitySql = `INSERT INTO collegeamenities 
                 (college_id, hostel, labs, library, sports, canteen, wifi) 
                 VALUES (?, ?, ?, ?, ?, ?, ?)`;

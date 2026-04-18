@@ -3,116 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin Dashboard | EduMatch</title>
-
-    <!-- Bootstrap + Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-
-    <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
     <style>
-        *{
-            font-family: 'Poppins', sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg,#eef2ff,#f8fafc);
-        }
-
-        /* Sidebar */
+        *{ font-family: 'Poppins', sans-serif; }
+        body { background: linear-gradient(135deg,#eef2ff,#f8fafc); }
         .sidebar {
-            height: 100vh;
-            width: 240px;
-            position: fixed;
+            height: 100vh; width: 240px; position: fixed;
             background: linear-gradient(180deg,#4f46e5,#6366f1);
-            color: rgb(255, 255, 255);
-            padding-top: 20px;
+            color: rgb(255,255,255); padding-top: 20px;
             box-shadow: 4px 0 20px rgba(0,0,0,0.1);
         }
-
         .sidebar a {
-            display: flex;
-            align-items: center;
-            padding: 12px 20px;
-            color: #e0e7ff;
-            text-decoration: none;
-            border-radius: 10px;
-            margin: 5px 10px;
-            transition: 0.3s;
+            display: flex; align-items: center;
+            padding: 12px 20px; color: #e0e7ff;
+            text-decoration: none; border-radius: 10px;
+            margin: 5px 10px; transition: 0.3s;
         }
-
-        .sidebar a:hover {
-            background: rgba(255,255,255,0.2);
-            transform: translateX(5px);
-        }
-        /* Content */
-        .content {
-            margin-left: 240px;
-            padding: 30px;
-        }
-
-        /* Cards */
+        .sidebar a:hover { background: rgba(255,255,255,0.2); transform: translateX(5px); }
+        .content { margin-left: 240px; padding: 30px; }
         .stat-card {
-            border-radius: 16px;
-            padding: 25px;
-            color: white;
-            position: relative;
-            overflow: hidden;
-            transition: 0.3s;
+            border-radius: 16px; padding: 25px; color: white;
+            position: relative; overflow: hidden; transition: 0.3s;
         }
-
-        .stat-card:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-        }
-
+        .stat-card:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
         .stat-card::after {
-            content: "";
-            position: absolute;
-            top: -30px;
-            right: -30px;
-            width: 100px;
-            height: 100px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 50%;
+            content: ""; position: absolute;
+            top: -30px; right: -30px;
+            width: 100px; height: 100px;
+            background: rgba(255,255,255,0.2); border-radius: 50%;
         }
-
-        /* Gradient Colors */
-        .bg-blue { background: linear-gradient(135deg,#3b82f6,#2563eb); }
-        .bg-green { background: linear-gradient(135deg,#22c55e,#16a34a); }
+        .bg-blue   { background: linear-gradient(135deg,#3b82f6,#2563eb); }
+        .bg-green  { background: linear-gradient(135deg,#22c55e,#16a34a); }
         .bg-yellow { background: linear-gradient(135deg,#facc15,#eab308); color:#1e293b; }
-
-        /* Buttons */
         .action-btn {
-            border-radius: 14px;
-            padding: 20px;
-            transition: 0.3s;
-            font-weight: 500;
-            background: white;
-            border: none;
+            border-radius: 14px; padding: 20px; transition: 0.3s;
+            font-weight: 500; background: white; border: none;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
-
         .action-btn:hover {
             transform: translateY(-5px);
             background: linear-gradient(135deg,#6366f1,#4f46e5);
             color: white;
         }
-
-        /* Logout Modal */
-        #logoutModal {
-            backdrop-filter: blur(6px);
-        }
-
     </style>
 </head>
 <body>
 
-<!-- Sidebar -->
 <div class="sidebar">
     <h4 class="text-center mb-4">EduMatch</h4>
-
     <a href="/admin/dashboard"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a>
     <a href="/admin/students"><i class="bi bi-people me-2"></i> Students</a>
     <a href="/admin/colleges"><i class="bi bi-building me-2"></i> Colleges</a>
@@ -122,14 +62,8 @@
     </a>
 </div>
 
-<!-- Content -->
 <div class="content">
-
-    <h4 class="mb-4 fw-semibold">
-        Welcome, <%= admin.name %> 👋
-    </h4>
-
-    <!-- Stats -->
+    <h4 class="mb-4 fw-semibold">Welcome, <%= admin.name %> 👋</h4>
     <div class="row g-4 mb-4">
         <div class="col-md-4">
             <div class="stat-card bg-blue">
@@ -137,14 +71,12 @@
                 <p><i class="bi bi-people me-2"></i>Total Students</p>
             </div>
         </div>
-
         <div class="col-md-4">
             <div class="stat-card bg-green">
                 <h2><%= totalColleges %></h2>
                 <p><i class="bi bi-building me-2"></i>Total Colleges</p>
             </div>
         </div>
-
         <div class="col-md-4">
             <div class="stat-card bg-yellow">
                 <h2><%= pendingFeedbacks %></h2>
@@ -152,73 +84,49 @@
             </div>
         </div>
     </div>
-
-    <!-- Actions -->
     <div class="row g-4">
         <div class="col-md-4">
             <a href="/admin/students" class="action-btn d-block text-center">
-                <i class="bi bi-people fs-2 d-block mb-2"></i>
-                Manage Students
+                <i class="bi bi-people fs-2 d-block mb-2"></i>Manage Students
             </a>
         </div>
-
         <div class="col-md-4">
             <a href="/admin/colleges" class="action-btn d-block text-center">
-                <i class="bi bi-building fs-2 d-block mb-2"></i>
-                Manage Colleges
+                <i class="bi bi-building fs-2 d-block mb-2"></i>Manage Colleges
             </a>
         </div>
-
         <div class="col-md-4">
             <a href="/admin/feedback" class="action-btn d-block text-center">
-                <i class="bi bi-chat-dots fs-2 d-block mb-2"></i>
-                View Feedback
+                <i class="bi bi-chat-dots fs-2 d-block mb-2"></i>View Feedback
             </a>
         </div>
     </div>
-
 </div>
 
-<!-- Logout Modal -->
-<div id="logoutModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; z-index:9999; align-items:center; justify-content:center;">
+<div id="logoutModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); backdrop-filter:blur(4px); z-index:9999; align-items:center; justify-content:center;">
     <div style="background:white; border-radius:20px; padding:36px; width:380px; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
-        
         <div style="font-size:40px;">🚪</div>
-
         <h5 class="mt-3 fw-bold">Leaving so soon?</h5>
         <p class="text-muted">Do you want to logout?</p>
-
         <div class="d-flex gap-2 mt-3">
-            <button onclick="document.getElementById('logoutModal').style.display='none'"
-                class="btn btn-outline-secondary w-100">
-                Stay
-            </button>
-
-            <button onclick="window.location.href='/admin/logout'"
-                class="btn btn-danger w-100">
-                Logout
-            </button>
+            <button onclick="document.getElementById('logoutModal').style.display='none'" class="btn btn-outline-secondary w-100">Stay</button>
+            <button onclick="window.location.href='/admin/logout'" class="btn btn-danger w-100">Logout</button>
         </div>
-
     </div>
 </div>
 
-<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
 <script>
-    sessionStorage.setItem('onAdminDashboard', 'true');
+    document.getElementById('logoutModal').style.display = 'none';
     history.pushState(null, null, location.href);
-
-    window.addEventListener('pageshow', function() {
+    window.addEventListener('pageshow', function(e) {
+        document.getElementById('logoutModal').style.display = 'none';
         history.pushState(null, null, location.href);
     });
-
     window.onpopstate = function () {
         history.pushState(null, null, location.href);
         document.getElementById('logoutModal').style.display = 'flex';
     };
 </script>
-
 </body>
 </html>
